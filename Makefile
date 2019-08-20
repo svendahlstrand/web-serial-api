@@ -1,8 +1,8 @@
 .PHONY: all clean run
 
-all: examples/analog-read-serial.html examples/dimmer.html
+all: docs/analog-read-serial.html docs/dimmer.html
 
-examples/%.html: src/%.html template-a template-b
+docs/%.html: src/%.html template-a template-b
 	cat "template-a" "$<" "template-b" > "$@"
 
 template-a template-b: src/template.html
@@ -11,5 +11,5 @@ template-a template-b: src/template.html
 clean:
 	rm -f template-{a,b} *.html
 
-run: examples/analog-read-serial.html examples/dimmer.html
+run: docs/analog-read-serial.html docs/dimmer.html
 	open -b "com.google.Chrome" $^
