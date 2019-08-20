@@ -1,0 +1,82 @@
+    <title>Analog Read Serial</title>
+    <style>
+      .tile {
+        font-size: 6em;
+      }
+
+      .carrot {
+        float: right;
+      }
+
+      .rabbit {
+        position: absolute;
+      }
+
+      .summary {
+        text-align: right;
+      }
+
+      .cartoon {
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="sven.png" alt="" width="105" />
+    <p class="bubble">
+      Hi there, kids! Let's play together with bunnies, carrots, and the Web Serial API.
+    </p>
+
+    <button id="connect-button" type="button">🔌 Connect</button>
+
+    <p class="cartoon"><span class="rabbit tile">🐰</span><span class="carrot tile">🥕</span></p>
+    <p class="summary">What a tasty looking snack!<br /><small>The carrot is <span>0</span> % threatened.</small></p>
+
+    <script>
+      let buffer = '';
+      const status = document.querySelector('.summary span');
+      const rabbit = document.querySelector('.rabbit');
+      let lastValue = '0';
+      let lastDegree;
+
+      function update() {
+        lastDegree = Math.floor(parseInt(lastValue.trim()) / 1023 * 100);
+        status.innerText = lastDegree;
+        rabbit.style.left = 'calc(' + lastDegree + '% - 2em)';
+
+        window.requestAnimationFrame(update);
+      }
+
+      window.requestAnimationFrame(update);
+
+      const appendStream = new WritableStream({
+        write(chunk) {
+          buffer += chunk;
+
+          let lines = buffer.split('\n');
+
+          if (lines.length > 1) {
+            buffer = lines.pop();
+
+            lines.forEach(function (line) {
+              lastValue = line;
+            });
+          }
+        }
+      });
+
+      async function getReader() {
+        const port = await navigator.serial.requestPort({});
+        await port.open({ baudrate: 9600 });
+
+        port.readable
+          .pipeThrough(new TextDecoderStream())
+          .pipeTo(appendStream);
+      }
+
+      const connectButton = document.getElementById ('connect-button');
+
+      connectButton.addEventListener('click', function () {
+        getReader();
+      });
+    </script>

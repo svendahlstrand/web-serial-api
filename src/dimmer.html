@@ -1,0 +1,107 @@
+    <title>Dimmer!</title>
+    <style>
+      label {
+        display: block;
+        margin-left: 1.5em;
+        margin-top: 0.5em;
+      }
+
+  input[type=range] {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    width: 100%; /* Specific width is required for Firefox. */
+    background: #2c2b2f; /* Otherwise white in Chrome */
+    border-radius: 3em;
+    /*background-size: 200% 200%;
+    background-position: 0 90%;*/
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 100%;
+    width: 16px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input[type=range]:focus {
+    outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 7em;
+    cursor: pointer;
+  }
+
+    </style>
+  </head>
+  <body>
+    <img src="sven.png" alt="" width="105" />
+    <p class="bubble">
+      Hello there! Time to light up an LED. 💡
+    </p>
+
+    <button id="connect-button" type="button">🔌 Connect</button>
+
+    <input id="led-dimmer" type="range" min="0" max="255" />
+    <label for="led-dimmer">LED dimmer<br /><small><span>0</span> % brightness</small></label>
+
+    🌑 🌒 🌓 🌔 🌕
+
+    <script>
+      let buffer = '';
+      const status = document.getElementById('status');
+      let lastValue = '0';
+      let lastDegree;
+      const ledDimmer = document.getElementById('led-dimmer');
+      const ledDimmerValue = document.querySelector('label span');
+
+      function update() {
+        const percent = Math.floor(ledDimmer.value / 255 * 100);
+
+        ledDimmer.style = 'background-image: linear-gradient(to right, #fed609 ' + percent + '%, #2c2b2f ' + percent + '%);';
+        ledDimmerValue.innerText = percent;
+
+        window.requestAnimationFrame(update);
+      }
+
+      window.requestAnimationFrame(update);
+
+      const appendStream = new WritableStream({
+        write(chunk) {
+          buffer += chunk;
+
+          let lines = buffer.split('\n');
+
+          if (lines.length > 1) {
+            buffer = lines.pop();
+
+            lines.forEach(function (line) {
+              lastValue = line;
+            });
+          }
+        }
+      });
+
+      async function getReader() {
+        const port = await navigator.serial.requestPort({});
+        await port.open({ baudrate: 9600 });
+
+        ledDimmer.addEventListener('input', (event) => {
+          if (port && port.writable) {
+            const writer = port.writable.getWriter();
+            const value = parseInt(event.target.value);
+            const bytes = new Uint8Array([value]);
+            writer.write(bytes);
+            console.dir(bytes);
+            writer.releaseLock();
+          }
+        });
+      }
+
+      const connectButton = document.getElementById ('connect-button');
+
+      connectButton.addEventListener('click', function () {
+        getReader();
+      });
+    </script>
