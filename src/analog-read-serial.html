@@ -32,8 +32,6 @@
       </p>
     </noscript>
 
-    <button id="connect-button" type="button">🔌 Connect</button>
-
     <p class="cartoon"><span class="rabbit tile">🐰</span><span class="carrot tile">🥕</span></p>
     <p class="summary">What a tasty looking snack!<br /><small>The carrot is <span>0</span> % threatened.</small></p>
 
@@ -78,10 +76,4 @@
           .pipeThrough(new TextDecoderStream())
           .pipeTo(appendStream);
       }
-
-      const connectButton = document.getElementById ('connect-button');
-
-      connectButton.addEventListener('click', function () {
-        getReader();
-      });
     </script>

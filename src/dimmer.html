@@ -46,12 +46,8 @@
       </p>
     </noscript>
 
-    <button id="connect-button" type="button">🔌 Connect</button>
-
     <input id="led-dimmer" type="range" min="0" max="255" />
     <label for="led-dimmer">LED dimmer<br /><small><span>0</span> % brightness</small></label>
-
-    🌑 🌒 🌓 🌔 🌕
 
     <script>
       let buffer = '';
@@ -103,10 +99,4 @@
           }
         });
       }
-
-      const connectButton = document.getElementById ('connect-button');
-
-      connectButton.addEventListener('click', function () {
-        getReader();
-      });
     </script>

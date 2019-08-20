@@ -34,13 +34,23 @@
       }
     </style>
     <!-- split -->
+    <button id="connect-button" type="button" disabled>🔌 Connect</button>
+
     <script>
-      if (!('serial' in navigator)) {
+      if ('serial' in navigator) {
+        const connectButton = document.getElementById ('connect-button');
+
+        connectButton.addEventListener('click', function () {
+          getReader();
+        });
+
+        connectButton.disabled = false;
+      }
+      else {
         const firstBubble = document.querySelector('p.bubble');
         const noSerialSupportNotice = document.createElement('p');
         noSerialSupportNotice.innerHTML = '<p class="notice bubble">You\'re on the right track! This browser is lacking support for Web Serial API, though, and thats a bummer.</p>';
 
-        document.body.appendChild(noSerialSupportNotice);
         firstBubble.parentNode.insertBefore(noSerialSupportNotice, firstBubble.nextSibling);
       }
     </script>
