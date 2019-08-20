@@ -15,6 +15,10 @@
         color: white;
       }
 
+      .notice {
+        background: orange;
+      }
+
       img {
         float: left;
       }
@@ -29,5 +33,15 @@
       }
     </style>
     <!-- split -->
+    <script>
+      if (!('serial' in navigator)) {
+        const firstBubble = document.querySelector('p.bubble');
+        const noSerialSupportNotice = document.createElement('p');
+        noSerialSupportNotice.innerHTML = '<p class="notice bubble">You\'re on the right track! This browser is lacking support for Web Serial API, though, and thats a bummer.</p>';
+
+        document.body.appendChild(noSerialSupportNotice);
+        firstBubble.parentNode.insertBefore(noSerialSupportNotice, firstBubble.nextSibling);
+      }
+    </script>
   </body>
 </html>
