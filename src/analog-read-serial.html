@@ -4,66 +4,57 @@
         font-size: 6em;
       }
 
-      .carrot {
-        float: right;
-      }
-
       .rabbit {
         position: absolute;
       }
 
-      .summary {
-        text-align: right;
-      }
-
-      .cartoon {
-        overflow: auto;
+      .carrot {
+        float: right;
       }
     </style>
   </head>
   <body>
-    <img src="sven.png" alt="" width="105" />
+    <img src="sven.png" alt="" width="105" height="105" />
     <p class="bubble">
       Hi there, kids! Let's play together with bunnies, carrots, and the Web Serial API.
     </p>
+
     <noscript>
       <p class="notice bubble">
         I'm sorry! For this to actully work you have to enable JavaScript in your browser.
       </p>
     </noscript>
 
-    <p class="cartoon"><span class="rabbit tile">🐰</span><span class="carrot tile">🥕</span></p>
-    <p class="summary">What a tasty looking snack!<br /><small>The carrot is <span>0</span> % threatened.</small></p>
+    <figure>
+        <div class="demo bubble"><span class="rabbit tile">🐰</span><span class="carrot tile">🥕</span></div>
+        <figcaption>What a tasty looking snack!<br /><small>The carrot is <span>0</span> % threatened.</small></figcaption>
+    </figure>
 
     <script>
-      let buffer = '';
-      const status = document.querySelector('.summary span');
-      const rabbit = document.querySelector('.rabbit');
-      let lastValue = '0';
-      let lastDegree;
+      let lineBuffer = '';
+      let latestValue = 0;
 
-      function update() {
-        lastDegree = Math.floor(parseInt(lastValue.trim()) / 1023 * 100);
-        status.innerText = lastDegree;
-        rabbit.style.left = 'calc(' + lastDegree + '% - 2em)';
+      function renderDemo() {
+        const rabbit = document.querySelector('.rabbit');
+        const percentage = Math.floor(latestValue / 1023 * 100);
+        const percentageStatus = document.querySelector('figcaption span');
 
-        window.requestAnimationFrame(update);
+        rabbit.style.left = 'calc(' + percentage + '% - 2em)';
+        percentageStatus.innerText = percentage;
+
+        window.requestAnimationFrame(renderDemo);
       }
-
-      window.requestAnimationFrame(update);
+      window.requestAnimationFrame(renderDemo);
 
       const appendStream = new WritableStream({
         write(chunk) {
-          buffer += chunk;
+          lineBuffer += chunk;
 
-          let lines = buffer.split('\n');
+          let lines = lineBuffer.split('\n');
 
           if (lines.length > 1) {
-            buffer = lines.pop();
-
-            lines.forEach(function (line) {
-              lastValue = line;
-            });
+            lineBuffer = lines.pop();
+            latestValue = parseInt(lines.pop().trim());
           }
         }
       });
@@ -71,6 +62,8 @@
       async function getReader() {
         const port = await navigator.serial.requestPort({});
         await port.open({ baudrate: 9600 });
+
+        connectButton.innerText = '🔌 Disconnect';
 
         port.readable
           .pipeThrough(new TextDecoderStream())

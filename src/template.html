@@ -20,28 +20,50 @@
         background: orange;
       }
 
+      .demo {
+        background: #2c2b2f;
+        border-radius: 3em;
+        padding: 0 1em;
+        overflow: auto;
+        position: relative;
+      }
+
       img {
         float: left;
       }
 
       button {
+        font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 1em;
         border-radius: 1em;
         border-width: 2px;
         padding: 0.5em 1em;
-        border-color: gray;
-        font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-        font-size: 1em;
+        border-color: #2c2b2f;
+      }
+
+      figcaption {
+        text-align: right;
+        margin: 1em 1.5em 0 0;
       }
     </style>
     <!-- split -->
     <button id="connect-button" type="button" disabled>🔌 Connect</button>
 
     <script>
-      if ('serial' in navigator) {
-        const connectButton = document.getElementById ('connect-button');
+      const connectButton = document.getElementById ('connect-button');
+      let port;
 
+      if ('serial' in navigator) {
         connectButton.addEventListener('click', function () {
-          getReader();
+          if (port) {
+            port.close();
+            port = undefined;
+
+            connectButton.innerText = '🔌 Connect';
+          }
+          else {
+            getReader();
+          }
         });
 
         connectButton.disabled = false;
