@@ -1,4 +1,4 @@
-    <title>Dimmer!</title>
+    <title>Dimmer</title>
     <style>
       input[type=range] {
         -webkit-appearance: none;
@@ -23,9 +23,9 @@
     </style>
   </head>
   <body>
-    <img src="sven.png" alt="" width="105" />
+    <img src="sven.png" alt="" width="105" height="105" />
     <p class="bubble">
-      Hello there! Time to light up an LED. 💡
+      Hello again! Time to light up an LED. 💡
     </p>
 
     <noscript>
@@ -34,7 +34,9 @@
       </p>
     </noscript>
 
-    <figure>
+    <button id="connect-button" type="button" disabled>🔌 Connect</button>
+
+    <figure class="fast animated">
       <input id="led-dimmer" type="range" min="0" max="255" value="0" class="demo bubble" disabled />
       <figcaption><label for="led-dimmer">LED dimmer<br /><small><span>0</span> % brightness</small></label></figcaption>
     </figure>
@@ -59,6 +61,8 @@
 
         document.querySelector('input').disabled = false;
         connectButton.innerText = '🔌 Disconnect';
+        document.querySelector('figure').classList.remove('fadeOut');
+        document.querySelector('figure').classList.add('bounceIn');
 
         ledDimmer.addEventListener('input', (event) => {
           if (port && port.writable) {

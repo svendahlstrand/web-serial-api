@@ -25,7 +25,9 @@
       </p>
     </noscript>
 
-    <figure>
+    <button id="connect-button" type="button" disabled>🔌 Connect</button>
+
+    <figure class="fast animated">
         <div class="demo bubble"><span class="rabbit tile">🐰</span><span class="carrot tile">🥕</span></div>
         <figcaption>What a tasty looking snack!<br /><small>The carrot is <span>0</span> % threatened.</small></figcaption>
     </figure>
@@ -46,24 +48,26 @@
       }
       window.requestAnimationFrame(renderDemo);
 
-      const appendStream = new WritableStream({
-        write(chunk) {
-          lineBuffer += chunk;
-
-          let lines = lineBuffer.split('\n');
-
-          if (lines.length > 1) {
-            lineBuffer = lines.pop();
-            latestValue = parseInt(lines.pop().trim());
-          }
-        }
-      });
-
       async function getReader() {
-        const port = await navigator.serial.requestPort({});
+        port = await navigator.serial.requestPort({});
         await port.open({ baudrate: 9600 });
 
         connectButton.innerText = '🔌 Disconnect';
+        document.querySelector('figure').classList.remove('fadeOut');
+        document.querySelector('figure').classList.add('bounceIn');
+
+        const appendStream = new WritableStream({
+          write(chunk) {
+            lineBuffer += chunk;
+
+            let lines = lineBuffer.split('\n');
+
+            if (lines.length > 1) {
+              lineBuffer = lines.pop();
+              latestValue = parseInt(lines.pop().trim());
+            }
+          }
+        });
 
         port.readable
           .pipeThrough(new TextDecoderStream())
