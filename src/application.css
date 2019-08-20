@@ -1,0 +1,79 @@
+body {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  max-width: 40em;
+}
+
+.bubble {
+  background: blue;
+  border-radius: 1em;
+  padding: 1em;
+  color: white;
+}
+
+.notice {
+  background: orange;
+}
+
+.demo {
+  background: #2c2b2f;
+  border-radius: 3em;
+  padding: 0 1em;
+  overflow: auto;
+  position: relative;
+}
+
+img {
+  float: left;
+}
+
+button {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 1em;
+  border-radius: 1em;
+  border-width: 2px;
+  padding: 0.5em 1em;
+  border-color: #2c2b2f;
+  outline: none;
+}
+
+figure {
+  opacity: 0;
+}
+
+figcaption {
+  text-align: right;
+  margin: 1em 1.5em 0 0;
+}
+
+.tile {
+  font-size: 6em;
+}
+
+.rabbit {
+  position: absolute;
+}
+
+.carrot {
+  float: right;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 100%;
+  width: 16px;
+  background: transparent;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 7em;
+}
