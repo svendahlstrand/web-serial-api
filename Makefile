@@ -1,18 +1,15 @@
 .PHONY: all clean run
 
-all: analog-read-serial.html dimmer.html animate.css application.css application.js sven.png
+all: examples/analog-read-serial.html examples/dimmer.html
 
-%.html: src/%.html template-a template-b
+examples/%.html: src/%.html template-a template-b
 	cat "template-a" "$<" "template-b" > "$@"
 
 template-a template-b: src/template.html
 	split -a 1 -p "split" "$<" "template-"
 
-animate.css application.css application.js sven.png: src/animate.css src/application.css src/application.js src/sven.png
-	cp $^ .
-
 clean:
-	rm -f template-{a,b} *.css *.html *.js *.png
+	rm -f template-{a,b} *.html
 
-run: analog-read-serial.html dimmer.html
+run: examples/analog-read-serial.html examples/dimmer.html
 	open -b "com.google.Chrome" $^

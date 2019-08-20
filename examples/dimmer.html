@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+    <link rel="stylesheet" href="application.css">
+    <title>Dimmer</title>
+  </head>
+  <body>
+    <img src="sven.png" alt="" width="105" height="105" />
+    <p class="bubble">
+      Hello again! Time to light up an LED. 💡
+    </p>
+
+    <noscript>
+      <p class="notice bubble">
+        I'm sorry! For this to actully work you have to enable JavaScript in your browser.
+      </p>
+    </noscript>
+
+    <button id="connect-button" type="button" disabled>🔌 Connect</button>
+
+    <figure class="fast animated">
+      <input id="led-dimmer" type="range" min="0" max="255" value="0" class="demo bubble" disabled />
+      <figcaption><label for="led-dimmer">LED dimmer<br /><small><span>0</span> % brightness</small></label></figcaption>
+    </figure>
+
+    <script>
+      const ledDimmer = document.getElementById('led-dimmer');
+      const ledDimmerValue = document.querySelector('label span');
+
+      function renderDemo() {
+        const percent = Math.floor(ledDimmer.value / 255 * 100);
+
+        ledDimmer.style = 'background-image: linear-gradient(to right, #fed609 ' + percent + '%, #2c2b2f ' + percent + '%);';
+        ledDimmerValue.innerText = percent;
+
+        window.requestAnimationFrame(renderDemo);
+      }
+      window.requestAnimationFrame(renderDemo);
+
+      async function getReader() {
+        port = await navigator.serial.requestPort({});
+        await port.open({ baudrate: 9600 });
+
+        document.querySelector('input').disabled = false;
+        connectButton.innerText = '🔌 Disconnect';
+        document.querySelector('figure').classList.remove('fadeOut');
+        document.querySelector('figure').classList.add('bounceIn');
+
+        ledDimmer.addEventListener('input', (event) => {
+          if (port && port.writable) {
+            const value = parseInt(event.target.value);
+            const bytes = new Uint8Array([value]);
+            const writer = port.writable.getWriter();
+
+            writer.write(bytes);
+            writer.releaseLock();
+          }
+        });
+      }
+    </script>
+    <!-- split -->
+
+    <script src="application.js"></script>
+  </body>
+</html>
