@@ -6,7 +6,7 @@ This repository is my playground for evaluating this upcoming API. If you posses
 
 ![](docs/assets/demo.gif)
 
-> Reading a resistor value and dimming an LED from the browser.
+> Reading analog input, using a potentiometer, and dimming an LED from the browser.
 
 ## Before Playing With the Serial API
 
@@ -25,11 +25,22 @@ The course of action is the same for toying with all examples. Load one of the i
 
 ## Analog Read Serial
 
+Open the built-in example sketch `01.Basics → AnalogReadSerial` in the Arduino IDE and upload it to your device. Follow the tutorial to [connect a potentiometer to the Arduino][analogtutorial]. Make sure your circuit works by using the [Serial Monitor][serialmonitor].
+
+Visit my [Analog Read Serial example page][analog].
+
 ## Dimmer
+
+Open the built-in example sketch `04.Communication → Dimmer` in the Arduino IDE and upload it to your device. Follow the tutorial to [connect an LED to the Arduino][dimmertutorial]. Make sure your circuit works by using the [Serial Monitor][serialmonitor].
+
+Visit my [Dimmer example page][dimmer].
 
 [ide]: https://www.arduino.cc/en/Main/Software
 [chrome]: https://www.google.com/chrome/beta/
 [edge]: https://www.microsoftedgeinsider.com/en-us/download
 [flag]: chrome://flags/#enable-experimental-web-platform-features
 [analog]: https://svendahlstrand.github.io/web-serial-api/analog-read-serial.html
+[analogtutorial]: https://www.arduino.cc/en/Tutorial/AnalogReadSerial
 [dimmer]: https://svendahlstrand.github.io/web-serial-api/dimmer.html
+[dimmertutorial]: https://www.arduino.cc/en/Tutorial/Dimmer
+[serialmonitor]: https://www.arduino.cc/en/guide/environment#toc12
