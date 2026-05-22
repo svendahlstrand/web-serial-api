@@ -38,4 +38,4 @@ Visit my [Dimmer example page][dimmer].
 [analogtutorial]: https://www.arduino.cc/en/Tutorial/AnalogReadSerial
 [dimmer]: https://svendahlstrand.github.io/web-serial-api/dimmer.html
 [dimmertutorial]: https://www.arduino.cc/en/Tutorial/Dimmer
-[serialmonitor]: https://www.arduino.cc/en/guide/environment#toc12
+[serialmonitor]: https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-monitor/
